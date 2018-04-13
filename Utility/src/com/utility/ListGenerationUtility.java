@@ -1,6 +1,8 @@
 package com.utility;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -13,7 +15,7 @@ public class ListGenerationUtility
 
    private static final String GENERATED_FILE = "ListWhichAreReused";
 
-   private static String[] filesListToBeVerifiedWith = { "Book", "MultiCentre" };
+   private static List<String> filesListToBeVerifiedWith = getListOfFilesInThePath("F:\\Utility");
 
    private static String fileToBeVerified = "Search";
 
@@ -28,7 +30,7 @@ public class ListGenerationUtility
             checkWithThisFile.createNewFile();
          }
          try (BufferedReader reader =
-            new BufferedReader(new FileReader(FILE_PATH + "\\" + fileToBeVerified + ".txt")))
+            new BufferedReader(new FileReader(FILE_PATH_GENERATED + "\\" + fileToBeVerified + ".txt")))
          {
             String line = reader.readLine();
             while (line != null)
@@ -52,19 +54,20 @@ public class ListGenerationUtility
 
       ListModificationUtility listModificationUtility = new ListModificationUtility();
       listModificationUtility.modifyExistingList();
+      System.out.println("Executin Done. Congrats!!");
    }
 
    private static void toGetListofclassesUniqueToThisFlow()
    {
       try (BufferedReader readerForFileVerified =
-         new BufferedReader(new FileReader(FILE_PATH + "\\" + fileToBeVerified + ".txt"));
+         new BufferedReader(new FileReader(FILE_PATH_GENERATED + "\\" + fileToBeVerified + ".txt"));
                BufferedReader readerForFileGenerated = new BufferedReader(
                   new FileReader(FILE_PATH_GENERATED + "\\" + GENERATED_FILE + ".txt")))
       {
          String line = readerForFileVerified.readLine();
          final File checkWithThisFile =
             new File(FILE_PATH_GENERATED + "\\" + GENERATED_FILE + ".txt");
-         final File checkForThisFile = new File(FILE_PATH + "\\" + fileToBeVerified + ".txt");
+         final File checkForThisFile = new File(FILE_PATH_GENERATED + "\\" + fileToBeVerified + ".txt");
          while (line != null)
          {
 
@@ -93,7 +96,7 @@ public class ListGenerationUtility
       try (FileWriter fw = new FileWriter(destFile, true);
                BufferedWriter bw = new BufferedWriter(fw);)
       {
-         bw.write(line + "====" + fileAgainstWhichItIsLooged.getName());
+         bw.write(line + "******" + fileAgainstWhichItIsLooged.getName());
          bw.newLine();
       }
       catch (IOException e)
@@ -146,4 +149,15 @@ public class ListGenerationUtility
       return false;
    }
 
+   private static List<String> getListOfFilesInThePath(String path)
+   {
+      final File file = new File(path);
+      List<String> listOfFiles = new ArrayList<String>();
+      File[] files = file.listFiles();
+      for (File f : files)
+      {
+         listOfFiles.add(StringUtils.split(f.getName(), ".")[0]);
+      }
+      return listOfFiles;
+   }
 }
