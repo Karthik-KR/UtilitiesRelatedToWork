@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +30,7 @@ public class ListModificationUtility
          String line = reader.readLine();
          while (line != null)
          {
-            String valueToBeChecked = StringUtils.split(line, "====")[0];
+            String valueToBeChecked = StringUtils.split(line, "******")[0];
 
             List<String> listOfFlowsWhereAllPresent =
                checkAndTellWhereElsePresent(valueToBeChecked, FILE_PATH_GENERATED, GENERATED_FILE);
@@ -40,7 +42,15 @@ public class ListModificationUtility
       {
          e.printStackTrace();
       }
+      try
 
+      {
+         Files.deleteIfExists(Paths.get(FILE_PATH_GENERATED + "\\" + GENERATED_FILE + ".txt"));
+      }
+      catch (Exception e)
+      {
+         e.printStackTrace();
+      }
    }
 
    private static List<String> checkAndTellWhereElsePresent(String methodToBeChecked,
@@ -55,7 +65,7 @@ public class ListModificationUtility
          {
             if (line.contains(methodToBeChecked))
             {
-               listOfValues.add(StringUtils.split(line, "====")[1]);
+               listOfValues.add(StringUtils.split(line, "******")[1]);
             }
             line = reader.readLine();
          }
@@ -80,10 +90,10 @@ public class ListModificationUtility
                BufferedWriter bw = new BufferedWriter(fw);)
       {
          if (!ListGenerationUtility.checkIfLineExistsInFile(
-            valueWhichIsPresent + "====" + listOfFlowsWhereAllPresent.toString(),
+            valueWhichIsPresent + "******" + listOfFlowsWhereAllPresent.toString(),
             fileWhereNewListIsLogged, FILE_PATH_GENERATED))
          {
-            bw.write(valueWhichIsPresent + "====" + listOfFlowsWhereAllPresent.toString());
+            bw.write(valueWhichIsPresent + "******" + listOfFlowsWhereAllPresent.toString());
             bw.newLine();
          }
       }
@@ -91,6 +101,7 @@ public class ListModificationUtility
       {
          e.printStackTrace();
       }
+
    }
 
 }
